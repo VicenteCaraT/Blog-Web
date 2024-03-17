@@ -1,0 +1,25 @@
+{% extends 'base.html'%}
+{% block header %}
+    <h2>{% block title %}Publicaciones {% endblock %}</h2>
+{% endblock %}
+
+{% block content %}
+
+{% for posts in posts %}
+
+    <article>
+        <header>
+            <h1>{{ posts.title }}</h1>
+            <div>
+                Publicado por {{ get_user(posts.author).username }}
+                el {{ posts.created.strftime('%Y-%m-%d') }}
+            </div>
+        </header>
+        <div>
+            <p>{{ posts.body }}</p>
+        </div>
+    </article>
+
+{% endfor %}
+
+{% endblock %}

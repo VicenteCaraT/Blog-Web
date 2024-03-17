@@ -58,7 +58,7 @@ def login():
         if error is None:
             session.clear()
             session['user_id'] = user.id
-            #return redirect(url_for('index'))
+            return redirect(url_for('blog.index'))
         flash(error)
 
     return render_template('auth/login.html')
@@ -77,7 +77,7 @@ def load_logged_in_user():
 @auth.route('/logout')
 def log_out():
     session.clear()
-    return redirect(url_for('index'))
+    return redirect(url_for('blog.index'))
 
 
 #le pide al usuario que es necesario loggearse para ver diferentes vistas

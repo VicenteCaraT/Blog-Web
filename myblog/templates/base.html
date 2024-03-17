@@ -13,8 +13,13 @@
             </a>
         </div>
         <nav>
+            {% if g.user %}
+            <samp>{{ g.user.username }}</samp>
+            <a href="">Cerrar Sesión</a>
+            {% else %}
             <a href="">Registrar Usuario</a>
             <a href="">Iniciar Sesión</a>
+            {% endif %}
         </nav>
     </header>
 
