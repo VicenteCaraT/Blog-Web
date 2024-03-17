@@ -51,24 +51,29 @@ def create():
 
 #obtener post unico
 def get_post(id, check_author=True):
-    post = Post.query.get_or_404(id)
-    return post
+    post = Post.query.get(id)
+    
+    if post is None:
+        abort(404, f'Id {id} de la pulicacion no existe')
+
+    if check_author and post.author != g.user.id:
+        abort(404)
 
 #Modificar post
-@blog.route('/blog/update/<int:id>', methods=['GET','POST'])
+@blog.route('/blog/update/<int:id>', methods=('GET','POST'))
 @login_required
 def update(id):
 
-    post = get_post(id)
+    post = get_post(id) 
 
     if request.method == 'POST':
-        #capturar datos de POST
         post.title = request.form.get('title')
         post.body = request.form.get('body')
 
         error = None
         if not post.title:
             error = 'Se requiere un título'
+        
         if error is not None:
             flash(error)
         else:
@@ -77,9 +82,8 @@ def update(id):
             return redirect(url_for('blog.index'))
         
         flash(error)
-
+        
     return render_template('blog/update.html', post=post)
-
 #Eliminar post
 @blog.route('/blog/delete/<int:id>')
 @login_required
