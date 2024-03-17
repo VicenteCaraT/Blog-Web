@@ -48,3 +48,43 @@ def create():
         flash(error)
 
     return render_template('blog/create.html')
+
+#obtener post unico
+def get_post(id, check_author=True):
+    post = Post.query.get_or_404(id)
+    return post
+
+#Modificar post
+@blog.route('/blog/update/<int:id>', methods=['GET','POST'])
+@login_required
+def update(id):
+
+    post = get_post(id)
+
+    if request.method == 'POST':
+        #capturar datos de POST
+        post.title = request.form.get('title')
+        post.body = request.form.get('body')
+
+        error = None
+        if not post.title:
+            error = 'Se requiere un título'
+        if error is not None:
+            flash(error)
+        else:
+            db.session.add(post)
+            db.session.commit()
+            return redirect(url_for('blog.index'))
+        
+        flash(error)
+
+    return render_template('blog/update.html', post=post)
+
+#Eliminar post
+@blog.route('/blog/delete/<int:id>')
+@login_required
+def delete():
+    post = get_post(id)
+    db.session.delete(post)
+    db.session.commit()
+    return redirect(url_for('blog.index'))
